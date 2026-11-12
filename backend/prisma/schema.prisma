@@ -1,0 +1,259 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------
+// Enums
+// ----------------------------------------------------
+
+enum RoleType {
+  STAFF
+  HEAD
+  MARKETING
+  ADMIN
+  MASTER_DATA
+}
+
+enum PromoStatus {
+  DRAFT
+  SUBMITTED_TO_HEAD
+  REJECTED_BY_HEAD
+  APPROVED
+  REOPENED
+}
+
+enum PromoType {
+  WEEKLY_LEAFLET
+  MONTHLY_CATALOGUE
+  SEASONAL_CAMPAIGN
+  INSTORE_SPECIAL
+  CLEARANCE
+}
+
+enum ApprovalAction {
+  SUBMITTED
+  APPROVED
+  REJECTED
+  REOPENED
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ACTION_REQUIRED
+}
+
+// ----------------------------------------------------
+// Models
+// ----------------------------------------------------
+
+model Department {
+  id          String      @id @default(uuid())
+  code        String      @unique
+  name        String
+  description String?
+  active      Boolean     @default(true)
+  headId      String?     @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  head        User?       @relation("DepartmentHead", fields: [headId], references: [id], onDelete: SetNull)
+  users       User[]      @relation("DepartmentMembers")
+  products    Product[]
+  promoLists  PromoList[]
+
+  @@map("departments")
+}
+
+model Role {
+  id          String    @id @default(uuid())
+  name        RoleType  @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  users       UserRoleMapping[]
+
+  @@map("roles")
+}
+
+model User {
+  id               String              @id @default(uuid())
+  name             String?
+  firstName        String
+  lastName         String
+  email            String              @unique
+  passwordHash     String
+  role             RoleType            @default(STAFF)
+  departmentId     String?
+  active           Boolean             @default(true)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  department       Department?         @relation("DepartmentMembers", fields: [departmentId], references: [id], onDelete: SetNull)
+  headedDepartment Department?         @relation("DepartmentHead")
+  roleMappings     UserRoleMapping[]
+  createdPromos    PromoList[]         @relation("PromoCreator")
+  approvedPromos   PromoList[]         @relation("PromoHeadApprover")
+  approvals        Approval[]
+  notifications    Notification[]
+  auditLogs        AuditLog[]
+
+  @@index([departmentId])
+  @@index([role])
+  @@map("users")
+}
+
+model UserRoleMapping {
+  id        String   @id @default(uuid())
+  userId    String
+  roleId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@map("user_role_mappings")
+}
+
+model Product {
+  id            String      @id @default(uuid())
+  sku           String      @unique
+  barcode       String?
+  name          String
+  category      String
+  departmentId  String
+  baseCost      Decimal     @db.Decimal(10, 2)
+  retailPrice   Decimal     @db.Decimal(10, 2)
+  vatRate       Decimal     @default(15.00) @db.Decimal(5, 2)
+  uom           String      @default("EA")
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  department    Department  @relation(fields: [departmentId], references: [id])
+  promoLines    PromoLine[]
+
+  @@index([departmentId])
+  @@index([sku])
+  @@map("products")
+}
+
+model PromoList {
+  id              String         @id @default(uuid())
+  promoCode       String         @unique
+  title           String
+  promoType       PromoType      @default(WEEKLY_LEAFLET)
+  startDate       DateTime
+  endDate         DateTime
+  status          PromoStatus    @default(DRAFT)
+  version         Int            @default(1)
+  notes           String?
+  createdById     String
+  departmentId    String
+  headApproverId  String?
+  headApprovedAt  DateTime?
+  submittedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  creator         User           @relation("PromoCreator", fields: [createdById], references: [id])
+  department      Department     @relation(fields: [departmentId], references: [id])
+  headApprover    User?          @relation("PromoHeadApprover", fields: [headApproverId], references: [id])
+  promoLines      PromoLine[]
+  approvals       Approval[]
+  notifications   Notification[]
+  auditLogs       AuditLog[]
+
+  @@index([status])
+  @@index([departmentId])
+  @@index([createdById])
+  @@map("promo_lists")
+}
+
+model PromoLine {
+  id               String     @id @default(uuid())
+  promoListId      String
+  productId        String
+  promoPrice       Decimal    @db.Decimal(10, 2)
+  promoDiscount    Decimal?   @db.Decimal(5, 2)
+  dealCost         Decimal?   @db.Decimal(10, 2)
+  scanDiscount     Decimal?   @db.Decimal(10, 2)
+  fundingMechanism String?
+  rebateAmount     Decimal?   @db.Decimal(10, 2)
+  estimatedVolume  Int?
+  mechanic         String?
+  displayType      String?
+  featurePosition  String?
+  coopSupport      Decimal?   @db.Decimal(10, 2)
+  notes            String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  promoList        PromoList  @relation(fields: [promoListId], references: [id], onDelete: Cascade)
+  product          Product    @relation(fields: [productId], references: [id])
+
+  @@index([promoListId])
+  @@index([productId])
+  @@map("promo_lines")
+}
+
+model Approval {
+  id          String         @id @default(uuid())
+  promoListId String
+  reviewerId  String
+  action      ApprovalAction
+  comments    String?
+  createdAt   DateTime       @default(now())
+
+  promoList   PromoList      @relation(fields: [promoListId], references: [id], onDelete: Cascade)
+  reviewer    User           @relation(fields: [reviewerId], references: [id])
+
+  @@index([promoListId])
+  @@index([reviewerId])
+  @@map("approvals")
+}
+
+model Notification {
+  id          String           @id @default(uuid())
+  userId      String
+  promoListId String?
+  title       String
+  message     String
+  type        NotificationType @default(INFO)
+  isRead      Boolean          @default(false)
+  linkUrl     String?
+  createdAt   DateTime         @default(now())
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  promoList   PromoList?       @relation(fields: [promoListId], references: [id], onDelete: SetNull)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id            String     @id @default(uuid())
+  entityType    String
+  entityId      String?
+  action        String
+  performedById String?
+  details       String?    @db.Text
+  ipAddress     String?
+  promoListId   String?
+  createdAt     DateTime   @default(now())
+
+  performer     User?      @relation(fields: [performedById], references: [id], onDelete: SetNull)
+  promoList     PromoList? @relation(fields: [promoListId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId])
+  @@index([performedById])
+  @@map("audit_logs")
+}

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 100" width="100%" height="100%">
+  <!-- Red background banner for SPAR wordmark -->
+  <rect x="0" y="0" width="390" height="100" fill="#E31E24" rx="4" />
+  
+  <!-- White SPAR text wordmark stylized -->
+  <g fill="#FFFFFF">
+    <!-- S -->
+    <path d="M 40 32 C 40 24 50 20 68 20 C 86 20 95 25 96 34 L 80 37 C 79 32 74 30 68 30 C 60 30 56 32 56 36 C 56 40 60 42 70 44 C 88 47 98 52 98 65 C 98 77 86 82 67 82 C 48 82 38 76 37 66 L 53 63 C 54 69 60 72 67 72 C 76 72 82 69 82 65 C 82 60 77 58 66 55 C 48 52 40 46 40 32 Z" />
+    
+    <!-- P -->
+    <path d="M 115 22 L 148 22 C 163 22 173 29 173 42 C 173 55 163 62 148 62 L 131 62 L 131 80 L 115 80 Z M 131 34 L 131 50 L 146 50 C 153 50 157 47 157 42 C 157 37 153 34 146 34 Z" />
+    
+    <!-- A -->
+    <path d="M 190 80 L 214 22 L 235 22 L 258 80 L 241 80 L 235 64 L 212 64 L 206 80 Z M 216 53 L 231 53 L 224 33 Z" />
+    
+    <!-- R -->
+    <path d="M 275 22 L 310 22 C 324 22 334 29 334 40 C 334 49 328 55 318 57 L 336 80 L 318 80 L 302 59 L 291 59 L 291 80 L 275 80 Z M 291 34 L 291 48 L 307 48 C 314 48 318 45 318 41 C 318 37 314 34 307 34 Z" />
+  </g>
+
+  <!-- Green Circular Tree Badge -->
+  <g transform="translate(410, 0)">
+    <circle cx="50" cy="50" r="48" fill="none" stroke="#008044" stroke-width="12" />
+    <!-- White background inside circle -->
+    <circle cx="50" cy="50" r="42" fill="#FFFFFF" />
+    <!-- SPAR Fir Tree symbol -->
+    <path d="M 50 14 L 66 36 L 56 36 L 72 55 L 60 55 L 77 75 L 23 75 L 40 55 L 28 55 L 44 36 L 34 36 Z" fill="#008044" />
+    <!-- Tree Trunk -->
+    <rect x="47" y="75" width="6" height="11" fill="#008044" />
+  </g>
+</svg>

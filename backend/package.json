@@ -1,0 +1,55 @@
+{
+  "name": "spar-promo-backend",
+  "version": "1.0.0",
+  "description": "SPAR Promo Approval System - Backend API",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:push": "prisma db push",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "test": "tsx tests/phase2_auth_test.ts && tsx tests/phase3_dashboard_test.ts && tsx tests/phase4_promo_entry_test.ts && tsx tests/phase5_head_review_test.ts && tsx tests/phase6_approved_promos_test.ts && tsx tests/phase7_notifications_test.ts && tsx tests/phase8_admin_management_test.ts && tsx tests/phase10_integration_test.ts",
+    "test:phase10": "tsx tests/phase10_integration_test.ts",
+    "test:admin": "tsx tests/phase8_admin_management_test.ts",
+    "test:notifications": "tsx tests/phase7_notifications_test.ts",
+    "test:approved-promos": "tsx tests/phase6_approved_promos_test.ts",
+    "test:head-review": "tsx tests/phase5_head_review_test.ts",
+    "test:promo-entry": "tsx tests/phase4_promo_entry_test.ts",
+    "test:dashboard": "tsx tests/phase3_dashboard_test.ts"
+  },
+  "keywords": [
+    "spar",
+    "promo",
+    "express",
+    "typescript",
+    "prisma",
+    "postgresql"
+  ],
+  "author": "SPAR Retail Systems",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "pdfkit": "^0.20.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^20.17.6",
+    "@types/pdfkit": "^0.17.6",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,0 +1,75 @@
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-quartz.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-spar-bg text-spar-charcoal font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* SPAR Custom AG Grid Styling */
+.ag-theme-quartz {
+  --ag-header-background-color: #007d32;
+  --ag-header-foreground-color: #ffffff;
+  --ag-header-cell-hover-background-color: #00682a;
+  --ag-border-color: #e2e8f0;
+  --ag-row-hover-color: #f0fbf4;
+  --ag-selected-row-background-color: #def7e6;
+  --ag-font-size: 12px;
+  --ag-font-family: inherit;
+  --ag-grid-size: 6px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.ag-theme-quartz .ag-header-cell-text {
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #f8fafc;
+}
+
+.ag-theme-quartz .ag-header-icon {
+  color: #cbd5e1;
+}
+
+.cell-readonly {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+}
+
+.cell-editable {
+  background-color: #ffffff;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.cell-highlight-number {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
