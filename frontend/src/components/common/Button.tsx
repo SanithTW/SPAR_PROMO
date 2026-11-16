@@ -19,7 +19,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed select-none';
+  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed select-none';
 
   const sizeStyles = {
     sm: 'text-xs px-2.5 py-1.5 gap-1.5',
@@ -28,11 +28,11 @@ export const Button: React.FC<ButtonProps> = ({
   }[size];
 
   const variantStyles = {
-    primary: 'bg-spar-green text-white hover:bg-spar-green-600 focus:ring-spar-green shadow-sm',
-    secondary: 'bg-slate-100 text-slate-800 hover:bg-slate-200 focus:ring-slate-400',
-    danger: 'bg-spar-red text-white hover:bg-spar-red-600 focus:ring-spar-red shadow-sm',
-    outline: 'border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 focus:ring-spar-green',
-    ghost: 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:ring-slate-300',
+    primary: 'bg-spar-green text-white hover:bg-spar-green-600 focus-visible:ring-spar-green shadow-sm',
+    secondary: 'bg-slate-100 text-slate-800 hover:bg-slate-200 focus-visible:ring-slate-400',
+    danger: 'bg-spar-red text-white hover:bg-spar-red-600 focus-visible:ring-spar-red shadow-sm',
+    outline: 'border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 focus-visible:ring-spar-green',
+    ghost: 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus-visible:ring-slate-300',
   }[variant];
 
   return (

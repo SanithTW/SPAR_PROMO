@@ -15,6 +15,7 @@ import {
   exportPromoPdf,
 } from '../services/promoService.js';
 import { formatDate, formatZar } from '../utils/formatters.js';
+import { promoTypeLabel } from '../utils/promoLinks.js';
 import {
   CheckCircle2,
   FileText,
@@ -899,9 +900,7 @@ export const ApprovedPromos: React.FC = () => {
                     <th className="py-3 px-4">Promo Type</th>
                     <th className="py-3 px-4">Created By</th>
                     <th className="py-3 px-4">Approved By</th>
-                    <th className="py-3 px-4">Approval Date</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4">Version</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Approved On</th>
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
@@ -913,70 +912,67 @@ export const ApprovedPromos: React.FC = () => {
                       onClick={() => navigate(`/approved-promos/${p.id}`)}
                     >
                       <td className="py-3 px-4">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
-                            {p.promoCode}
-                          </span>
-                          <span className="font-semibold text-slate-800 truncate max-w-xs block">
-                            {p.title}
-                          </span>
-                        </div>
+                        <span className="font-semibold text-slate-800 truncate max-w-[18rem] block" title={p.title}>
+                          {p.title}
+                        </span>
+                        <span className="font-mono text-[11px] text-slate-500 whitespace-nowrap">
+                          {p.promoCode} · v{p.version || 1}
+                        </span>
                       </td>
                       <td className="py-3 px-4 text-slate-600 font-medium">
                         {p.department?.name || '—'}
                       </td>
-                      <td className="py-3 px-4 text-slate-600 capitalize">
-                        {p.promoType.replace('_', ' ').toLowerCase()}
+                      <td className="py-3 px-4 text-slate-600 whitespace-nowrap">
+                        {promoTypeLabel(p.promoType)}
                       </td>
                       <td className="py-3 px-4 text-slate-700">
                         {p.creator ? `${p.creator.firstName} ${p.creator.lastName}` : 'Staff'}
                       </td>
                       <td className="py-3 px-4">
-                        <span className="font-semibold text-emerald-800 flex items-center gap-1">
+                        <span className="font-semibold text-emerald-800 flex items-center gap-1 whitespace-nowrap">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                           {p.headApprover ? `${p.headApprover.firstName} ${p.headApprover.lastName}` : 'Dept Head'}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-slate-500 font-mono text-[11px]">
+                      <td className="py-3 px-4 text-slate-500 text-xs whitespace-nowrap">
                         {p.headApprovedAt ? formatDate(p.headApprovedAt) : formatDate(p.updatedAt)}
                       </td>
-                      <td className="py-3 px-4">
-                        <StatusBadge status="APPROVED" />
-                      </td>
-                      <td className="py-3 px-4 font-mono text-slate-600">
-                        v{p.version || 1}
-                      </td>
                       <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="flex items-center justify-end gap-1">
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="p-1.5 h-8 text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50"
-                            title="Export Excel"
+                            className="h-8 px-2 font-semibold text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50 whitespace-nowrap"
+                            title="Download as Excel"
+                            aria-label={`Download ${p.promoCode} as Excel`}
+                            leftIcon={<FileSpreadsheet className="w-4 h-4" />}
                             isLoading={exportingId === p.id && exportType === 'excel'}
                             disabled={!!exportingId}
                             onClick={() => handleExportExcel(p.id, p.promoCode)}
                           >
-                            <FileSpreadsheet className="w-4 h-4" />
+                            Excel
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="p-1.5 h-8 text-rose-700 hover:text-rose-800 hover:bg-rose-50"
-                            title="Export PDF"
+                            className="h-8 px-2 font-semibold text-rose-700 hover:text-rose-800 hover:bg-rose-50 whitespace-nowrap"
+                            title="Download as PDF"
+                            aria-label={`Download ${p.promoCode} as PDF`}
+                            leftIcon={<FileText className="w-4 h-4" />}
                             isLoading={exportingId === p.id && exportType === 'pdf'}
                             disabled={!!exportingId}
                             onClick={() => handleExportPdf(p.id, p.promoCode)}
                           >
-                            <FileText className="w-4 h-4" />
+                            PDF
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
+                            className="whitespace-nowrap"
                             leftIcon={<Eye className="w-3.5 h-3.5" />}
                             onClick={() => navigate(`/approved-promos/${p.id}`)}
                           >
-                            View Details
+                            View
                           </Button>
                         </div>
                       </td>

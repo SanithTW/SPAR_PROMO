@@ -41,7 +41,6 @@ import {
   ArrowLeft,
   Layers,
   ChevronDown,
-  Sparkles,
   TrendingUp,
   BarChart3,
   X,
@@ -1754,16 +1753,26 @@ export const PromoEntry: React.FC = () => {
           {/* Card Header matching screenshot with Excel Upload actions */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
-              <span className="text-emerald-700 bg-emerald-50 border border-emerald-200/60 font-bold text-xs px-2.5 py-0.5 rounded-md">
-                Dept Staff Input
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-white text-xs font-bold">
+                1
               </span>
-              <h3 className="text-sm font-bold text-slate-800">Add Promotion Line (11 Input Fields Only)</h3>
+              <div>
+                <h3 className="text-sm font-bold text-slate-800">Add a product to this promo list</h3>
+                <p className="text-xs text-slate-500">
+                  Pick the promo dates, find the product, enter the discounts, then click “Add to Promo List”.
+                </p>
+              </div>
             </div>
-            
+
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-xs text-slate-500 font-medium">
-                Calculated Duration:{' '}
-                <strong className="text-emerald-700 font-bold">{calculatedDurationDays} Days</strong> (To - From + 1)
+              <span
+                className="text-xs text-slate-500 font-medium whitespace-nowrap"
+                title="Counted from the From date to the To date, including both days"
+              >
+                Runs for{' '}
+                <strong className="text-emerald-700 font-bold">
+                  {calculatedDurationDays} day{calculatedDurationDays === 1 ? '' : 's'}
+                </strong>
               </span>
 
               {/* Excel Upload and Template Actions */}
@@ -2145,36 +2154,46 @@ export const PromoEntry: React.FC = () => {
       {/* ==================== 6. PROMOTION LINES TABLE ==================== */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden space-y-3 p-5">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-          <div className="flex items-center gap-3">
-            <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-spar-green" />
-              Promotional Product Lines ({lines.length})
-            </h3>
-            <span className="text-xs text-slate-400">
-              | Formulas synchronized with Special Promo Excel
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white text-xs font-bold">
+              2
             </span>
+            <div>
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                Products in this list ({lines.length})
+              </h3>
+              <p className="text-xs text-slate-500">Prices and margins are calculated the same way as the Special Promo Excel.</p>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {/* View Switcher */}
-            <div className="flex items-center bg-slate-100 rounded-lg p-0.5 text-xs font-medium text-slate-600">
+            <div
+              className="flex items-center bg-slate-100 rounded-lg p-0.5 text-xs font-medium text-slate-600"
+              role="group"
+              aria-label="Table view"
+            >
               <button
                 onClick={() => setTableViewMode('special')}
-                className={`px-2.5 py-1 rounded-md transition ${tableViewMode === 'special'
+                aria-pressed={tableViewMode === 'special'}
+                title="Every column from the Special Promo Excel"
+                className={`px-2.5 py-1 rounded-md transition whitespace-nowrap ${tableViewMode === 'special'
                   ? 'bg-white text-emerald-800 font-bold shadow-sm'
                   : 'hover:text-slate-900'
                   }`}
               >
-                📊 51-Col Special Promo Model
+                Full Excel view
               </button>
               <button
                 onClick={() => setTableViewMode('aggrid')}
-                className={`px-2.5 py-1 rounded-md transition ${tableViewMode === 'aggrid'
+                aria-pressed={tableViewMode === 'aggrid'}
+                title="Only the key columns"
+                className={`px-2.5 py-1 rounded-md transition whitespace-nowrap ${tableViewMode === 'aggrid'
                   ? 'bg-white text-emerald-800 font-bold shadow-sm'
                   : 'hover:text-slate-900'
                   }`}
               >
-                📋 Compact Grid
+                Compact view
               </button>
             </div>
 
@@ -2188,7 +2207,7 @@ export const PromoEntry: React.FC = () => {
               disabled={lines.length === 0}
               className="bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 font-bold text-xs"
             >
-              Fill & Download Special Promo Excel
+              Download as Special Promo Excel
             </Button>
           </div>
         </div>
@@ -2198,9 +2217,10 @@ export const PromoEntry: React.FC = () => {
             <div className="w-10 h-10 rounded-full border-2 border-emerald-500 text-emerald-600 flex items-center justify-center mx-auto mb-3">
               <Plus className="w-5 h-5 stroke-[2.5]" />
             </div>
-            <h4 className="font-bold text-slate-800 text-sm mb-1">No promo lines added yet</h4>
+            <h4 className="font-bold text-slate-800 text-sm mb-1">No products added yet</h4>
             <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-              Use the 11 input fields above to add items. All 51 columns and formulas of Special Promo - MB, TG - Sep 2026.xlsx will be automatically calculated.
+              Add products using the form above, or use “Upload Excel” to bring in many at once. Prices, margins and
+              forecasts are worked out for you.
             </p>
           </div>
         ) : tableViewMode === 'special' ? (

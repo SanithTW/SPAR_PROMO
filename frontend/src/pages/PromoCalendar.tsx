@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, CalendarDays, ExternalLink, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext.js';
 import { fetchPromos, fetchDepartments } from '../services/promoService.js';
-import { PromoList, PromoStatus, RoleType } from '../types/index.js';
+import { PromoList, PromoStatus } from '../types/index.js';
+import { openPathFor } from '../utils/promoLinks.js';
 import { PageHeader } from '../components/layout/PageHeader.js';
 import { StatusBadge } from '../components/common/StatusBadge.js';
 import { getStatusDetails } from '../utils/formatters.js';
@@ -46,15 +47,6 @@ function durationDays(p: PromoList): number {
   const [ay, am, ad] = dayKey(p.startDate).split('-').map(Number);
   const [by, bm, bd] = dayKey(p.endDate).split('-').map(Number);
   return Math.round((Date.UTC(by, bm - 1, bd) - Date.UTC(ay, am - 1, ad)) / 86400000) + 1;
-}
-
-function openPathFor(p: PromoList, role?: RoleType): string | null {
-  if (!role) return null;
-  if (p.status === 'APPROVED' && role !== 'MASTER_DATA') return `/approved-promos/${p.id}`;
-  if (p.status === 'SUBMITTED_TO_HEAD' && (role === 'HEAD' || role === 'ADMIN')) return `/head-review/${p.id}`;
-  if (['DRAFT', 'REJECTED_BY_HEAD', 'REOPENED'].includes(p.status) && (role === 'STAFF' || role === 'ADMIN'))
-    return `/promo-entry/${p.id}`;
-  return null;
 }
 
 interface WeekSegment {
