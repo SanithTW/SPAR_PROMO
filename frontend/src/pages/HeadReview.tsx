@@ -16,6 +16,7 @@ import {
   fetchPromoTypes,
 } from '../services/promoService.js';
 import { formatDate, formatZar } from '../utils/formatters.js';
+import { promoTypeLabel } from '../utils/promoLinks.js';
 import {
   Check,
   X,
@@ -1197,26 +1198,22 @@ export const HeadReview: React.FC = () => {
                       onClick={() => navigate(`/head-review/${p.id}`)}
                     >
                       <td className="py-3 px-4">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
-                            {p.promoCode}
-                          </span>
-                          <span className="font-semibold text-slate-800 truncate max-w-xs block">
-                            {p.title}
-                          </span>
-                        </div>
+                        <span className="font-semibold text-slate-800 truncate max-w-[18rem] block" title={p.title}>
+                          {p.title}
+                        </span>
+                        <span className="font-mono text-[11px] text-slate-500 whitespace-nowrap">{p.promoCode}</span>
                       </td>
                       <td className="py-3 px-4 text-slate-600 font-medium">
                         {p.department?.name || '—'}
                       </td>
-                      <td className="py-3 px-4 text-slate-700">
+                      <td className="py-3 px-4 text-slate-700 whitespace-nowrap">
                         {p.creator ? `${p.creator.firstName} ${p.creator.lastName}` : 'Staff'}
                       </td>
-                      <td className="py-3 px-4 text-slate-500 font-mono text-[11px]">
+                      <td className="py-3 px-4 text-slate-500 text-xs whitespace-nowrap">
                         {p.submittedAt ? formatDate(p.submittedAt) : formatDate(p.createdAt)}
                       </td>
-                      <td className="py-3 px-4 text-slate-600 capitalize">
-                        {p.promoType.replace('_', ' ').toLowerCase()}
+                      <td className="py-3 px-4 text-slate-600 whitespace-nowrap">
+                        {promoTypeLabel(p.promoType)}
                       </td>
                       <td className="py-3 px-4">
                         <StatusBadge status={p.status} />
