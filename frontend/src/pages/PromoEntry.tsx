@@ -2,8 +2,6 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, CellValueChangedEvent } from 'ag-grid-community';
-import { PageHeader } from '../components/layout/PageHeader.js';
-import { StatusBadge } from '../components/common/StatusBadge.js';
 import { Button } from '../components/common/Button.js';
 import { ConfirmDialog } from '../components/common/ConfirmDialog.js';
 import {
@@ -29,7 +27,6 @@ import {
 import { useAuth } from '../contexts/AuthContext.js';
 import * as XLSX from 'xlsx';
 import {
-  PlusCircle,
   Save,
   Send,
   Trash2,
@@ -37,10 +34,6 @@ import {
   AlertTriangle,
   Info,
   CheckCircle2,
-  Clock,
-  ArrowLeft,
-  Layers,
-  ChevronDown,
   Sparkles,
   TrendingUp,
   BarChart3,
@@ -48,7 +41,6 @@ import {
   Plus,
   FileSpreadsheet,
   Download,
-  Upload,
 } from 'lucide-react';
 
 // Helper to parse dates from Excel rows (serial numbers, Date objects, or formatted strings)
@@ -118,25 +110,25 @@ export const PromoEntry: React.FC = () => {
   const { user } = useAuth();
 
   // Master options
-  const [promoTypes, setPromoTypes] = useState<PromoTypeOption[]>([]);
-  const [myDrafts, setMyDrafts] = useState<PromoList[]>([]);
+  const [, setPromoTypes] = useState<PromoTypeOption[]>([]);
+  const [, setMyDrafts] = useState<PromoList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form State
   const [promoId, setPromoId] = useState<string | null>(id || null);
-  const [promoCode, setPromoCode] = useState<string>('');
+  const [, setPromoCode] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [promoType, setPromoType] = useState<PromoType>('WEEKLY_LEAFLET');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
   const [status, setStatus] = useState<PromoStatus>('DRAFT');
-  const [version, setVersion] = useState<number>(1);
+  const [, setVersion] = useState<number>(1);
   const [rejectionReason, setRejectionReason] = useState<string | null>(null);
   const [departmentName, setDepartmentName] = useState<string>('');
-  const [createdByName, setCreatedByName] = useState<string>('');
+  const [, setCreatedByName] = useState<string>('');
 
   // Promo Lines Grid State
   const [lines, setLines] = useState<PromoLine[]>([]);
@@ -198,7 +190,7 @@ export const PromoEntry: React.FC = () => {
   });
 
   const [isSearchingMaster, setIsSearchingMaster] = useState(false);
-  const [isSearchingSales, setIsSearchingSales] = useState(false);
+  const [, setIsSearchingSales] = useState(false);
   const [matchedApiProduct, setMatchedApiProduct] = useState<Product | null>(null);
   const [apiSuggestions, setApiSuggestions] = useState<Product[]>([]);
   const [isSearchingSuggestions, setIsSearchingSuggestions] = useState(false);
@@ -1044,7 +1036,7 @@ export const PromoEntry: React.FC = () => {
 
   // Modals / Feedback
   const [notification, setNotification] = useState<{
-    type: 'success' | 'error' | 'warning';
+    type: 'success' | 'error' | 'warning' | 'info';
     message: string;
   } | null>(null);
   const [confirmSubmitOpen, setConfirmSubmitOpen] = useState(false);
@@ -1053,8 +1045,6 @@ export const PromoEntry: React.FC = () => {
 
   // Permission checks based on Status
   const isEditable = status === 'DRAFT' || status === 'REJECTED_BY_HEAD' || status === 'REOPENED';
-  const isSubmitted = status === 'SUBMITTED_TO_HEAD';
-  const isApproved = status === 'APPROVED';
 
   // Format currency helper
   const formatZar = (val?: number | null) =>
