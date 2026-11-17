@@ -159,13 +159,13 @@ export function Login() {
           <div className="flex flex-wrap items-center gap-3.5 mb-10">
             <div className="inline-flex items-center rounded-xl bg-white px-4 py-2.5 shadow-xl shadow-black/30 ring-1 ring-white/25">
               <img
-                src="/spar-logo.svg"
+                src="/spar-logo.png"
                 alt="SPAR Logo"
                 className="h-8 w-auto object-contain"
                 onError={(e) => {
                   const target = e.currentTarget;
-                  if (!target.src.endsWith('/spar-logo.png')) {
-                    target.src = '/spar-logo.png';
+                  if (!target.src.endsWith('/spar-logo_2.png')) {
+                    target.src = '/spar-logo_2.png';
                   }
                 }}
               />
@@ -283,13 +283,13 @@ export function Login() {
               {/* Mobile Header (Shown on tablet / mobile) */}
               <div className="lg:hidden mb-8 flex items-center justify-between pb-6 border-b border-slate-100">
                 <img
-                  src="/spar-logo.svg"
+                  src="/spar-logo.png"
                   alt="SPAR Logo"
                   className="h-8 w-auto object-contain"
                   onError={(e) => {
                     const target = e.currentTarget;
-                    if (!target.src.endsWith('/spar-logo.png')) {
-                      target.src = '/spar-logo.png';
+                    if (!target.src.endsWith('/spar-logo_2.png')) {
+                      target.src = '/spar-logo_2.png';
                     }
                   }}
                 />
