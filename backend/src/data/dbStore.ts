@@ -26,12 +26,19 @@ class DbStore {
   }> = [];
 
   private isInitialized = false;
+  private initPromise: Promise<void> | null = null;
 
   constructor() {
     this.initStore();
   }
 
-  public async initStore() {
+  /** Seeds the store once; concurrent callers share the same run (so seeding can't overwrite restored data). */
+  public initStore(): Promise<void> {
+    if (!this.initPromise) this.initPromise = this.seedStore();
+    return this.initPromise;
+  }
+
+  private async seedStore() {
     if (this.isInitialized) return;
 
     const defaultPasswordHash = await bcrypt.hash(config.devSeedPassword, config.bcryptSaltRounds);

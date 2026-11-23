@@ -12,6 +12,7 @@ import headReviewRoutes from './headReviewRoutes.js';
 import approvedPromoRoutes from './approvedPromoRoutes.js';
 import notificationRoutes from './notificationRoutes.js';
 import salesRoutes from './salesRoutes.js';
+import fabricRoutes from './fabricRoutes.js';
 import { checkIntegrationsHealth } from '../controllers/healthController.js';
 
 const apiRouter = Router();
@@ -24,6 +25,7 @@ apiRouter.use('/users', userRoutes);
 apiRouter.use('/departments', departmentRoutes);
 apiRouter.use('/products', productRoutes);
 apiRouter.use('/sales', salesRoutes);
+apiRouter.use('/fabric', fabricRoutes);
 apiRouter.use('/promos', promoRoutes);
 apiRouter.use('/promo-lists', promoRoutes);
 apiRouter.use('/promo-types', promoTypeRoutes);

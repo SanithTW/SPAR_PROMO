@@ -53,6 +53,7 @@ export interface ProductData {
   uom: string;
   isActive: boolean;
   // Product Master hierarchy & supplier (present when sourced from the real Product Master API)
+  dcCode?: string | null;
   departmentName?: string | null;
   subDepartment?: string | null;
   productClass?: string | null;

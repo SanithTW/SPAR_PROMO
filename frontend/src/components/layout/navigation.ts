@@ -8,6 +8,7 @@ import {
   ShieldAlert,
   Database,
   CalendarDays,
+  List,
   LucideIcon,
 } from 'lucide-react';
 import { RoleType } from '../../types/index.js';
@@ -67,6 +68,15 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['STAFF', 'MARKETING', 'HEAD', 'ADMIN'],
     section: 'Promotions',
     keywords: 'view export excel pdf marketing',
+  },
+  {
+    name: 'List',
+    path: '/list',
+    icon: List,
+    description: 'Every product line from approved promos, in one table',
+    roles: ['MARKETING', 'MASTER_DATA', 'ADMIN'],
+    section: 'Promotions',
+    keywords: 'lines products items all table csv marketing',
   },
   {
     name: 'Users & Departments',

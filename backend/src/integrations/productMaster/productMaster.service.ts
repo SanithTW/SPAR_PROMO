@@ -42,6 +42,7 @@ export class ProductMasterService {
       vatRate,
       uom: pm.uom_desc || 'EA',
       isActive: pm.supplier_order_active !== false,
+      dcCode: pm.dc_code ?? null,
       departmentName: pm.department ?? null,
       subDepartment: pm.sub_department ?? null,
       productClass: pm.product_class ?? null,
@@ -57,18 +58,36 @@ export class ProductMasterService {
 
   /**
    * Search Product Master and sync found products to local store.
-   * Supports searching by exact product code (padded/unpadded numeric) and text description.
+   * Supports searching by exact DC code, exact product code (padded/unpadded numeric) and text description.
    */
   public async searchProducts(query: string, departmentId?: string, limit = 20): Promise<ProductData[]> {
     const clean = query.trim();
     const products: ProductData[] = [];
     const seenCodes = new Set<string>();
 
-    // 1. Direct code lookup if query is numeric (up to 8 digits)
+    // 1. Exact DC code match if query is numeric. Keep only rows whose dc_code really matches:
+    //    a Product Master build without the dc_code filter ignores the parameter and returns any products.
+    if (/^\d{2,10}$/.test(clean)) {
+      try {
+        const dcRes = await productMasterClient.searchProducts({ dc_code: clean, limit });
+        for (const item of dcRes.items) {
+          if (item.dc_code === clean && !seenCodes.has(item.pro_code)) {
+            const product = this.mapToProductData(item, departmentId);
+            products.push(product);
+            seenCodes.add(item.pro_code);
+            await dbStore.upsertProduct(product);
+          }
+        }
+      } catch {
+        // DC code search unavailable, continue with product code and text search
+      }
+    }
+
+    // 2. Direct code lookup if query is numeric (up to 8 digits)
     if (/^\d{1,8}$/.test(clean)) {
       try {
         const direct = await this.getProductByCode(clean, departmentId);
-        if (direct) {
+        if (direct && !seenCodes.has(direct.sku)) {
           products.push(direct);
           seenCodes.add(direct.sku);
         }
@@ -77,7 +96,7 @@ export class ProductMasterService {
       }
     }
 
-    // 2. Query Product Master catalog (if empty or length >= 2)
+    // 3. Query Product Master catalog (if empty or length >= 2)
     if (clean.length === 0 || clean.length >= 2) {
       try {
         const pmRes = await productMasterClient.searchProducts({

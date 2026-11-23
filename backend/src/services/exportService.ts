@@ -491,8 +491,10 @@ export class ExportService {
       const row = sheet.getRow(R);
 
       const prod = line.product || {};
-      const dcCode = String(line.dc || line.dcCode || prod.sku || '100245').trim();
-      const masterInfo = MASTER_LOOKUP[dcCode] || {};
+      // Real DC code from Product Master (blank when the product has none), never the product code.
+      const dcCode = String(line.dc || line.dcCode || prod.dcCode || '').trim();
+      // Sample fallback data, keyed by product code so a real DC code can't pick up a sample product.
+      const masterInfo = MASTER_LOOKUP[String(prod.sku || '')] || {};
 
       const food = line.food || masterInfo.dept || prod.department?.name || 'Fresh';
       const pType = String(line.promo || line.promoType || promoData.promoType || 'SPECIAL PROMO').toUpperCase();
@@ -505,11 +507,11 @@ export class ExportService {
       const pClass = line.pClass || masterInfo.pClass || 'Standard';
       const segment = line.segment || masterInfo.segment || 'General';
       const posCode = line.pos || line.posCode || masterInfo.pos || 'P-00000';
-      const barcode = line.barcode || masterInfo.barcode || prod.barcode || '';
-      const desc = line.desc || masterInfo.desc || prod.name || 'Promo Product';
+      const barcode = line.barcode || prod.barcode || masterInfo.barcode || '';
+      const desc = line.desc || prod.name || masterInfo.desc || 'Promo Product';
       const status = 'ACTIVE';
 
-      const nmrp = Number(line.nmrp || masterInfo.nmrp || prod.retailPrice || 400);
+      const nmrp = Number(line.nmrp || prod.retailPrice || masterInfo.nmrp || 400);
       const normalMargin = Number(line.normalMargin || line.baseMargin || masterInfo.margin || 0.15);
       const supDisc = (Number(line.supDisc ?? line.supplierDisc ?? 5)) / 100;
       const sparDisc = (Number(line.sparDisc ?? line.sparDiscount ?? 5)) / 100;

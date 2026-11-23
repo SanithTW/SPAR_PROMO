@@ -49,6 +49,7 @@ export interface User {
 export interface Product {
   id: string;
   sku: string;
+  dcCode?: string | null;
   barcode?: string | null;
   name: string;
   category: string;

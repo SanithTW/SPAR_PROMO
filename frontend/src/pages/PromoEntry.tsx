@@ -42,6 +42,20 @@ import {
   Download,
 } from 'lucide-react';
 
+/**
+ * The search result that a typed code refers to. An exact product code wins, then an exact DC code,
+ * then a product code missing its leading zeros (a 7-digit DC code padded to 8 digits can be a
+ * different product's code, so the DC code is checked first), then a barcode.
+ */
+function findProductByCode(results: Product[], code: string): Product | undefined {
+  return (
+    results.find((p) => p.sku === code) ||
+    results.find((p) => p.dcCode === code) ||
+    results.find((p) => p.sku === code.padStart(8, '0')) ||
+    results.find((p) => p.barcode === code)
+  );
+}
+
 // Helper to parse dates from Excel rows (serial numbers, Date objects, or formatted strings)
 function parseExcelDate(val: any, fallbackDate: string): string {
   if (!val) return fallbackDate;
@@ -284,12 +298,7 @@ export const PromoEntry: React.FC = () => {
       const searchResults = await searchProducts(clean);
       if (searchResults && searchResults.length > 0) {
         const found =
-          searchResults.find(
-            (p) =>
-              p.sku === clean ||
-              p.sku === clean.padStart(8, '0') ||
-              p.barcode === clean
-          ) || (searchResults.length === 1 ? searchResults[0] : null);
+          findProductByCode(searchResults, clean) || (searchResults.length === 1 ? searchResults[0] : null);
 
         if (found) {
           await populateSelectedProduct(found);
@@ -353,12 +362,7 @@ export const PromoEntry: React.FC = () => {
           setApiSuggestions(results || []);
           // If the user typed an exact product code, auto-select it!
           if (clean.length >= 2) {
-            const exact = (results || []).find(
-              (p) =>
-                p.sku === clean ||
-                p.sku === clean.padStart(8, '0') ||
-                p.barcode === clean
-            );
+            const exact = findProductByCode(results || [], clean);
             if (exact) {
               populateSelectedProduct(exact);
             } else {
@@ -564,8 +568,7 @@ export const PromoEntry: React.FC = () => {
         const searchRes = await searchProducts(dc);
         if (searchRes && searchRes.length > 0) {
           matchedProduct =
-            searchRes.find((p) => p.sku === dc || p.sku === dc.padStart(8, '0') || p.barcode === dc) ||
-            (searchRes.length === 1 ? searchRes[0] : undefined);
+            findProductByCode(searchRes, dc) || (searchRes.length === 1 ? searchRes[0] : undefined);
           if (matchedProduct) {
             await populateSelectedProduct(matchedProduct);
             const nmrp = Number(matchedProduct.retailPrice) || 0;
@@ -600,7 +603,8 @@ export const PromoEntry: React.FC = () => {
     }
 
     const computed = calculateSpecialPromoLineData({
-      dc,
+      // The product's real DC code from Product Master, not whatever was typed into the search box.
+      dc: matchedProduct.dcCode || '',
       pos: entryPosCode || masterProduct.posCode,
       barcode: masterProduct.barcode,
       desc: masterProduct.desc,
@@ -867,13 +871,7 @@ export const PromoEntry: React.FC = () => {
         try {
           const searchResults = await searchProducts(rawProCode);
           if (searchResults && searchResults.length > 0) {
-            matchedProduct =
-              searchResults.find(
-                (p) =>
-                  p.sku === rawProCode ||
-                  p.sku === rawProCode.padStart(8, '0') ||
-                  p.barcode === rawProCode
-              ) || searchResults[0];
+            matchedProduct = findProductByCode(searchResults, rawProCode) || searchResults[0];
           }
         } catch (searchErr) {
           console.warn(`Product lookup failed for ${rawProCode}:`, searchErr);
@@ -912,7 +910,7 @@ export const PromoEntry: React.FC = () => {
 
         // Calculate Special Promo Excel formulas
         const computed = calculateSpecialPromoLineData({
-          dc: sku,
+          dc: matchedProduct?.dcCode || '', // real DC code from Product Master
           pos: posCode,
           barcode,
           desc,
@@ -1878,7 +1876,7 @@ export const PromoEntry: React.FC = () => {
                   onChange={(e) => handleDcCodeChange(e.target.value)}
                   onFocus={() => setShowDcSuggestions(true)}
                   onKeyDown={handleDcCodeKeyDown}
-                  placeholder="Product code (e.g. 00011049) or product name"
+                  placeholder="Product code, DC code or product name"
                   className="w-full bg-white border border-slate-300 rounded-lg pl-3 pr-8 py-2 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 font-medium"
                 />
                 <Search className="w-3.5 h-3.5 absolute right-2.5 top-2.5 text-slate-400 pointer-events-none" />
@@ -1923,6 +1921,11 @@ export const PromoEntry: React.FC = () => {
                         <div className="min-w-0 pr-2">
                           <div className="flex items-center gap-1.5 truncate">
                             <span className="font-mono font-bold text-emerald-800">{prod.sku}</span>
+                            {prod.dcCode && (
+                              <span className="font-mono text-[10px] text-slate-500 bg-slate-100 rounded px-1">
+                                DC {prod.dcCode}
+                              </span>
+                            )}
                             <span className="text-slate-300">•</span>
                             <span className="font-semibold text-slate-800 truncate">{prod.name}</span>
                             {prod.category && (
@@ -2079,7 +2082,7 @@ export const PromoEntry: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
                 <span>
-                  Product code <strong className="font-mono">&ldquo;{entryDcCode}&rdquo;</strong> not found in Product Master. Check the code, or pick a product from the suggestions list.
+                  No product or DC code <strong className="font-mono">&ldquo;{entryDcCode}&rdquo;</strong> found in Product Master. Check the code, or pick a product from the suggestions list.
                 </span>
               </div>
             </div>
@@ -2386,7 +2389,7 @@ export const PromoEntry: React.FC = () => {
                       <td className="py-2 px-2.5 text-slate-600">{l.segment || 'General'}</td>
                       {/* 10. DC Code */}
                       <td className="py-2 px-2.5 font-mono font-bold text-emerald-800 bg-emerald-50/40">
-                        {l.dc || l.product?.sku || '100245'}
+                        {l.dc || '—'}
                       </td>
                       {/* 11. POS Code */}
                       <td className="py-2 px-2.5 font-mono text-slate-600">{l.pos || 'P-00000'}</td>

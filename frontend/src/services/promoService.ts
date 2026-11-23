@@ -187,6 +187,38 @@ export async function headApprovePromoLines(
   });
 }
 
+export interface TypeReviewDecision {
+  promoId: string;
+  approvedLineIds: string[];
+  lineComments?: Record<string, string>;
+}
+
+export interface TypeReviewResult {
+  promoId: string;
+  sourcePromoCode: string;
+  reviewedPromoCode: string;
+  approvedCount: number;
+  returnedCount: number;
+  stillWaitingCount: number;
+  approvedPromo: PromoList | null;
+  returnedPromo: PromoList | null;
+}
+
+/**
+ * Head reviews the lines of one promotion type across promo lists. Ticked lines are approved,
+ * unticked lines of that type are returned to Staff; lines of other types stay waiting.
+ */
+export async function headReviewByType(
+  type: string,
+  decisions: TypeReviewDecision[],
+  comments?: string
+): Promise<TypeReviewResult[]> {
+  return apiRequest<TypeReviewResult[]>('/head-review/by-type/review', {
+    method: 'POST',
+    body: JSON.stringify({ type, decisions, comments }),
+  });
+}
+
 export async function exportPromoExcel(id: string, fallbackFilename = 'promo_export.xlsx'): Promise<void> {
   return apiDownload(`/approved-promos/${id}/export/excel`, fallbackFilename);
 }

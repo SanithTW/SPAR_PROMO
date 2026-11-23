@@ -1,6 +1,7 @@
 export interface PMProductSummary {
   product_id: number;
   pro_code: string;
+  dc_code?: string | null;
   product_description: string | null;
   case_size: number | null;
   uom_desc: string | null;
@@ -19,7 +20,6 @@ export interface PMProductDetail extends PMProductSummary {
   list_cost: string | null;
   uom_code: string | null;
   vat_active: boolean | null;
-  dc_code?: string | null;
   segment?: string | null;
   inner_case_size?: number | null;
   suppliers?: Array<{
@@ -41,6 +41,7 @@ export interface PMSearchParams {
   q?: string;
   dep_code?: string;
   barcode?: string;
+  dc_code?: string;
   supplier_order_active?: boolean;
   limit?: number;
   offset?: number;

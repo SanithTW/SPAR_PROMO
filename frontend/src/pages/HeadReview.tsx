@@ -13,10 +13,11 @@ import {
   headApprovePromo,
   headApprovePromoLines,
   headRejectPromo,
-  fetchPromoTypes,
 } from '../services/promoService.js';
 import { formatDate, formatZar } from '../utils/formatters.js';
 import { promoTypeLabel } from '../utils/promoLinks.js';
+import { LINE_PROMO_TYPES, linePromoType } from '../utils/linePromoTypes.js';
+import { PromoTypeQueue } from '../components/headReview/PromoTypeQueue.js';
 import {
   Check,
   X,
@@ -54,7 +55,8 @@ export const HeadReview: React.FC = () => {
   );
   const [searchQuery, setSearchQuery] = useState('');
   const [promoTypeFilter, setPromoTypeFilter] = useState('');
-  const [promoTypeOptions, setPromoTypeOptions] = useState<{ code: string; name: string }[]>([]);
+  // Queue layout: lines grouped under promotion-type headings, or one row per promo list
+  const [queueView, setQueueView] = useState<'type' | 'list'>('type');
 
   // Detail View State
   const [detailPromo, setDetailPromo] = useState<PromoList | null>(null);
@@ -77,13 +79,6 @@ export const HeadReview: React.FC = () => {
   const gridApiRef = useRef<GridApi<PromoLine> | null>(null);
   const [selectedLineIds, setSelectedLineIds] = useState<string[]>([]);
   const [lineComments, setLineComments] = useState<Record<string, string>>({});
-
-  // Load Promo Types
-  useEffect(() => {
-    fetchPromoTypes()
-      .then((types) => setPromoTypeOptions(types))
-      .catch((err) => console.error('Failed to load promo types', err));
-  }, []);
 
   // Fetch List
   const loadReviewList = useCallback(async () => {
@@ -154,7 +149,8 @@ export const HeadReview: React.FC = () => {
   // Filtered List
   const filteredPromos = useMemo(() => {
     return promos.filter((p) => {
-      if (promoTypeFilter && p.promoType !== promoTypeFilter) {
+      // Keep promo lists that have at least one line of the chosen promotion type
+      if (promoTypeFilter && !(p.promoLines || []).some((l) => linePromoType(l) === promoTypeFilter)) {
         return false;
       }
       return true;
@@ -1106,9 +1102,33 @@ export const HeadReview: React.FC = () => {
             </button>
           </div>
 
-          <Button variant="outline" size="sm" onClick={loadReviewList} isLoading={isLoadingList}>
-            Refresh Queue
-          </Button>
+          <div className="flex items-center gap-2">
+            {/* Queue layout toggle */}
+            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs font-semibold">
+              {(
+                [
+                  ['type', 'By promotion type'],
+                  ['list', 'By promo list'],
+                ] as const
+              ).map(([view, label]) => (
+                <button
+                  key={view}
+                  type="button"
+                  onClick={() => setQueueView(view)}
+                  className={`px-3 py-1.5 rounded-md whitespace-nowrap transition-all ${
+                    queueView === view
+                      ? 'bg-white text-spar-green-900 shadow-sm font-bold'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <Button variant="outline" size="sm" onClick={loadReviewList} isLoading={isLoadingList}>
+              Refresh Queue
+            </Button>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 border-t border-slate-100">
@@ -1132,10 +1152,10 @@ export const HeadReview: React.FC = () => {
               value={promoTypeFilter}
               onChange={(e) => setPromoTypeFilter(e.target.value)}
             >
-              <option value="">All Promo Types</option>
-              {promoTypeOptions.map((opt) => (
-                <option key={opt.code} value={opt.code}>
-                  {opt.name}
+              <option value="">All Promotion Types</option>
+              {LINE_PROMO_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {type}
                 </option>
               ))}
             </select>
@@ -1174,6 +1194,17 @@ export const HeadReview: React.FC = () => {
                 : 'Try adjusting your search criteria or filter options above.'}
             </p>
           </div>
+        ) : queueView === 'type' ? (
+          <PromoTypeQueue
+            promos={filteredPromos}
+            typeFilter={promoTypeFilter}
+            onOpenPromo={(promoId) => navigate(`/head-review/${promoId}`)}
+            onReviewType={
+              statusFilter === 'SUBMITTED_TO_HEAD'
+                ? (type) => navigate(`/head-review/type/${encodeURIComponent(type)}`)
+                : undefined
+            }
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs divide-y divide-slate-200">

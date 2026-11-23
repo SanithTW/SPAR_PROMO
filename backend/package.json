@@ -18,7 +18,8 @@
     "test:approved-promos": "tsx tests/phase6_approved_promos_test.ts",
     "test:head-review": "tsx tests/phase5_head_review_test.ts",
     "test:promo-entry": "tsx tests/phase4_promo_entry_test.ts",
-    "test:dashboard": "tsx tests/phase3_dashboard_test.ts"
+    "test:dashboard": "tsx tests/phase3_dashboard_test.ts",
+    "fabric:test": "tsx scripts/fabric-test.ts"
   },
   "keywords": [
     "spar",
@@ -38,6 +39,7 @@
     "exceljs": "^4.4.0",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
+    "mssql": "12.7.14",
     "pdfkit": "^0.20.2",
     "zod": "^3.23.8"
   },
@@ -46,10 +48,14 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.7",
+    "@types/mssql": "12.3.0",
     "@types/node": "^20.17.6",
     "@types/pdfkit": "^0.17.6",
     "prisma": "^5.22.0",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
+  },
+  "overrides": {
+    "tedious": "20.3.9"
   }
 }

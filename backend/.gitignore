@@ -5,3 +5,6 @@ dist/
 !.env.example
 *.tsbuildinfo
 *.log
+
+# Local in-memory store snapshot (dev only)
+data/

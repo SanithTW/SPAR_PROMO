@@ -10,7 +10,9 @@ import { Dashboard } from '../pages/Dashboard.js';
 import { PromoCalendar } from '../pages/PromoCalendar.js';
 import { PromoEntry } from '../pages/PromoEntry.js';
 import { HeadReview } from '../pages/HeadReview.js';
+import { PromoTypeReview } from '../pages/PromoTypeReview.js';
 import { ApprovedPromos } from '../pages/ApprovedPromos.js';
+import { PromoLines } from '../pages/PromoLines.js';
 import { UsersDepartments } from '../pages/UsersDepartments.js';
 import { MasterData } from '../pages/MasterData.js';
 import { Settings } from '../pages/Settings.js';
@@ -65,6 +67,14 @@ export const AppRoutes: React.FC = () => {
           }
         />
         <Route
+          path="head-review/type/:type"
+          element={
+            <RoleGuard allowedRoles={['HEAD', 'ADMIN']}>
+              <PromoTypeReview />
+            </RoleGuard>
+          }
+        />
+        <Route
           path="head-review/:id"
           element={
             <RoleGuard allowedRoles={['HEAD', 'ADMIN']}>
@@ -87,6 +97,16 @@ export const AppRoutes: React.FC = () => {
           element={
             <RoleGuard allowedRoles={['STAFF', 'MARKETING', 'HEAD', 'ADMIN']}>
               <ApprovedPromos />
+            </RoleGuard>
+          }
+        />
+
+        {/* Every approved promo line in one table (Marketing, Master Data) */}
+        <Route
+          path="list"
+          element={
+            <RoleGuard allowedRoles={['MARKETING', 'MASTER_DATA', 'ADMIN']}>
+              <PromoLines />
             </RoleGuard>
           }
         />

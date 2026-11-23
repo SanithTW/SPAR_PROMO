@@ -157,6 +157,7 @@ class ProductMasterClient {
     if (params.q) query.append('q', params.q);
     if (params.dep_code) query.append('dep_code', params.dep_code);
     if (params.barcode) query.append('barcode', params.barcode);
+    if (params.dc_code) query.append('dc_code', params.dc_code);
     if (params.supplier_order_active !== undefined) {
       query.append('supplier_order_active', String(params.supplier_order_active));
     }
