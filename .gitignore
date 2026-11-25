@@ -28,3 +28,6 @@ Thumbs.db
 
 # Real promo data (template is tracked)
 /Special Promo - MB, TG - Sep 2026.xlsx
+
+# Office lock files
+~$*

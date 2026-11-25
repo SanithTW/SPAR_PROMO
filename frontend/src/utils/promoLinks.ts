@@ -10,6 +10,10 @@ export function openPathFor(p: { id: string; status: PromoStatus }, role?: RoleT
   if (p.status === 'SUBMITTED_TO_HEAD' && (role === 'HEAD' || role === 'ADMIN')) return `/head-review/${p.id}`;
   if (['DRAFT', 'REJECTED_BY_HEAD', 'REOPENED'].includes(p.status) && (role === 'STAFF' || role === 'ADMIN'))
     return `/promo-entry/${p.id}`;
+  // Staff can still look at a list while it is with the Head (Promo Entry shows it read-only)
+  if (p.status === 'SUBMITTED_TO_HEAD' && role === 'STAFF') return `/promo-entry/${p.id}`;
+  // The Head can look back at lists they returned to Staff (Head Review shows them read-only)
+  if (['REJECTED_BY_HEAD', 'REOPENED'].includes(p.status) && role === 'HEAD') return `/head-review/${p.id}`;
   return null;
 }
 

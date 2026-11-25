@@ -40,7 +40,9 @@ import {
   Plus,
   FileSpreadsheet,
   Download,
+  ArrowLeft,
 } from 'lucide-react';
+import { StatusBadge } from '../components/common/StatusBadge.js';
 
 /**
  * The search result that a typed code refers to. An exact product code wins, then an exact DC code,
@@ -131,7 +133,7 @@ export const PromoEntry: React.FC = () => {
 
   // Form State
   const [promoId, setPromoId] = useState<string | null>(id || null);
-  const [, setPromoCode] = useState<string>('');
+  const [promoCode, setPromoCode] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [promoType, setPromoType] = useState<PromoType>('WEEKLY_LEAFLET');
   const [startDate, setStartDate] = useState<string>('');
@@ -1692,9 +1694,36 @@ export const PromoEntry: React.FC = () => {
   return (
     <div className="space-y-4 pb-12">
       {/* 1. Page Header matching screenshot */}
-      <div className="pt-0.5">
-        <h1 className="text-xl font-bold text-slate-900 tracking-tight">New Promo List</h1>
-        <p className="text-xs text-slate-500 mt-0.5">Create and prepare a promotional list for Head review.</p>
+      <div className="pt-0.5 flex flex-wrap items-start justify-between gap-3">
+        {id && promoCode ? (
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">{title || 'Promo List'}</h1>
+              <StatusBadge status={status} size="sm" />
+            </div>
+            <p className="text-xs text-slate-500 mt-0.5">
+              <span className="font-mono">{promoCode}</span>
+              {status === 'SUBMITTED_TO_HEAD' && ' · With your Head for approval — view only'}
+              {status === 'APPROVED' && ' · Approved by your Head — view only'}
+              {isEditable && ' · Make your changes and submit for Head review.'}
+            </p>
+          </div>
+        ) : (
+          <div>
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">New Promo List</h1>
+            <p className="text-xs text-slate-500 mt-0.5">Create and prepare a promotional list for Head review.</p>
+          </div>
+        )}
+        {id && !isEditable && (
+          <Button
+            variant="outline"
+            size="sm"
+            leftIcon={<ArrowLeft className="w-4 h-4" />}
+            onClick={() => navigate('/')}
+          >
+            Back to Dashboard
+          </Button>
+        )}
       </div>
 
       {/* Toast Notification Banner */}
