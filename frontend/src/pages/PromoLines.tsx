@@ -12,7 +12,7 @@ import { promoTypeLabel } from '../utils/promoLinks.js';
 import { useAuth } from '../contexts/AuthContext.js';
 
 /** One grid row: a promo line together with the promo list it belongs to. */
-interface ListRow extends PromoLine {
+interface ListRow extends Omit<PromoLine, 'promo'> {
   promo: PromoList;
 }
 
