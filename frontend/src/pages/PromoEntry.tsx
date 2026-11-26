@@ -41,7 +41,9 @@ import {
   Plus,
   FileSpreadsheet,
   Download,
+  ArrowLeft,
 } from 'lucide-react';
+import { StatusBadge } from '../components/common/StatusBadge.js';
 
 /**
  * The search result that a typed code refers to. An exact product code wins, then an exact DC code,
@@ -132,7 +134,7 @@ export const PromoEntry: React.FC = () => {
 
   // Form State
   const [promoId, setPromoId] = useState<string | null>(id || null);
-  const [, setPromoCode] = useState<string>('');
+  const [promoCode, setPromoCode] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [promoType, setPromoType] = useState<PromoType>('WEEKLY_LEAFLET');
   const [startDate, setStartDate] = useState<string>('');
@@ -1694,9 +1696,38 @@ export const PromoEntry: React.FC = () => {
     <div className="space-y-6 pb-12">
       {/* Executive Page Header matching Login & Dashboard */}
       <PageHeader
-        title={promoId ? 'Edit Promo List' : 'New Promo List'}
-        description="Prepare promotional SKUs, verify live POS margins, and submit for Department Head approval."
+        title={id && promoCode ? title || 'Promo List' : 'New Promo List'}
+        description={
+          id && promoCode
+            ? `${promoCode}${
+                status === 'SUBMITTED_TO_HEAD'
+                  ? ' · With your Head for approval — view only'
+                  : status === 'APPROVED'
+                    ? ' · Approved by your Head — view only'
+                    : isEditable
+                      ? ' · Make your changes and submit for Head review.'
+                      : ''
+              }`
+            : 'Prepare promotional SKUs, verify live POS margins, and submit for Department Head approval.'
+        }
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Promo Entry' }]}
+        actions={
+          id && (promoCode || !isEditable) ? (
+            <div className="flex items-center gap-2">
+              {promoCode && <StatusBadge status={status} size="sm" />}
+              {!isEditable && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  leftIcon={<ArrowLeft className="w-4 h-4" />}
+                  onClick={() => navigate('/')}
+                >
+                  Back to Dashboard
+                </Button>
+              )}
+            </div>
+          ) : undefined
+        }
       />
 
       {/* Toast Notification Banner */}

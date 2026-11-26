@@ -7,4 +7,4 @@ dist/
 *.log
 
 # Local in-memory store snapshot (dev only)
-data/
+/data/
