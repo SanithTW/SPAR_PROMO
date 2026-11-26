@@ -746,22 +746,22 @@ export const ApprovedPromos: React.FC = () => {
       )}
 
       {/* Governance Banner */}
-      <div className="p-4 rounded-xl bg-[#007d32] text-white flex items-start gap-3.5 border border-[#00682a] shadow-md">
-        <div className="p-2 rounded-lg bg-white/20 text-white mt-0.5 flex-shrink-0">
-          <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+      <div className="p-4 sm:px-5 rounded-2xl bg-sky-50/70 border border-sky-200/80 text-slate-700 flex items-start gap-3.5 shadow-xs">
+        <div className="w-9 h-9 rounded-xl bg-white border border-sky-200 text-sky-700 flex items-center justify-center flex-shrink-0">
+          <CheckCircle2 className="w-4 h-4" />
         </div>
         <div>
-          <h4 className="text-sm font-bold text-white tracking-wide">
+          <h4 className="text-xs font-bold text-slate-900 tracking-wide uppercase">
             Marketing & Commercial Release Repository
           </h4>
-          <p className="text-xs text-white/90 mt-0.5 leading-relaxed font-normal">
+          <p className="text-xs text-slate-600 mt-0.5 leading-relaxed font-normal">
             All records listed here have completed full governance and received sign-off from their respective Department Head. No secondary or Director review is required.
           </p>
         </div>
       </div>
 
       {/* Search and Server-Side Filters */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+      <div className="bg-white rounded-3xl border border-slate-200/90 p-4 sm:p-5 shadow-xl shadow-slate-900/[0.04] space-y-3">
         <div className="flex flex-col sm:flex-row items-center gap-3">
           {/* Search bar */}
           <div className="relative flex-1 w-full">
@@ -861,7 +861,8 @@ export const ApprovedPromos: React.FC = () => {
       </div>
 
       {/* Approved Promos Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/[0.04] overflow-hidden">
+        <div className="h-1 w-full bg-gradient-to-r from-[#E31B23] via-sky-500 to-[#007D32]" />
         {isLoadingList ? (
           <div className="p-12 text-center text-slate-400 space-y-2">
             <div className="w-8 h-8 border-2 border-spar-green border-t-transparent rounded-full animate-spin mx-auto" />

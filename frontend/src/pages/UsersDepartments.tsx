@@ -644,12 +644,14 @@ export const UsersDepartments: React.FC = () => {
       />
 
       {/* Governance Banner */}
-      <div className="p-4 rounded-xl bg-white border border-slate-200 text-xs text-slate-600 flex items-start gap-3 shadow-sm">
-        <Shield className="w-5 h-5 text-spar-green flex-shrink-0 mt-0.5" />
+      <div className="p-4 sm:px-5 rounded-2xl bg-purple-50/60 border border-purple-200/80 text-xs text-slate-700 flex items-start gap-3.5 shadow-xs">
+        <div className="w-9 h-9 rounded-xl bg-white border border-purple-200 text-purple-700 flex items-center justify-center flex-shrink-0">
+          <Shield className="w-4 h-4" />
+        </div>
         <div>
-          <span className="font-bold text-slate-900 block mb-0.5">Role Governance & Department Rules</span>
-          Authorized roles: <strong className="text-slate-800">STAFF</strong> (Commercial Submitter), <strong className="text-slate-800">HEAD</strong> (Final Approver), <strong className="text-slate-800">MARKETING</strong> (Campaign Viewer), <strong className="text-slate-800">ADMIN</strong>, and <strong className="text-slate-800">MASTER_DATA</strong>.
-          <span className="ml-1 text-emerald-800 font-semibold">Strict Rule: Exactly ONE Head per department. Director role is permanently omitted.</span>
+          <span className="font-bold text-slate-900 uppercase tracking-wide block mb-0.5">Role Governance & Department Rules</span>
+          Authorized roles: <strong className="text-slate-900">STAFF</strong> (Commercial Submitter), <strong className="text-slate-900">HEAD</strong> (Final Approver), <strong className="text-slate-900">MARKETING</strong> (Campaign Viewer), <strong className="text-slate-900">ADMIN</strong>, and <strong className="text-slate-900">MASTER_DATA</strong>.
+          <span className="ml-1 text-[#007D32] font-bold">Strict Rule: Exactly ONE Head per department. Director role is permanently omitted.</span>
         </div>
       </div>
 
@@ -679,16 +681,16 @@ export const UsersDepartments: React.FC = () => {
       )}
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200">
+      <div className="inline-flex items-center gap-1.5 p-1 bg-white rounded-2xl border border-slate-200/90 shadow-xs">
         <button
           onClick={() => {
             setActiveTab('users');
             setErrorMessage(null);
           }}
-          className={`flex items-center gap-2 pb-3 px-3 text-sm font-semibold border-b-2 transition-colors ${
+          className={`flex items-center gap-2 py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'users'
-              ? 'border-spar-green text-spar-green'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
+              ? 'bg-[#007D32] text-white shadow-sm'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
         >
           <Users className="w-4 h-4" />
@@ -699,10 +701,10 @@ export const UsersDepartments: React.FC = () => {
             setActiveTab('departments');
             setErrorMessage(null);
           }}
-          className={`flex items-center gap-2 pb-3 px-3 text-sm font-semibold border-b-2 transition-colors ${
+          className={`flex items-center gap-2 py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'departments'
-              ? 'border-spar-green text-spar-green'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
+              ? 'bg-[#007D32] text-white shadow-sm'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
         >
           <Building2 className="w-4 h-4" />
@@ -714,7 +716,7 @@ export const UsersDepartments: React.FC = () => {
       {activeTab === 'users' ? (
         <div className="space-y-4">
           {/* User Filters & Search Bar */}
-          <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 items-center justify-between">
+          <div className="p-4 sm:p-5 bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/[0.04] flex flex-col sm:flex-row gap-3 items-center justify-between">
             <div className="relative w-full sm:w-72">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
               <input

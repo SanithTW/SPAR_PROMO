@@ -29,14 +29,14 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   }[color];
 
   return (
-    <div className="bg-white rounded-lg border border-slate-200/80 p-5 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm shadow-slate-900/[0.03] hover:border-slate-300 hover:shadow-md transition-all">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{title}</p>
-          <h3 className="text-2xl font-bold text-slate-900 mt-1 tracking-tight">{value}</h3>
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{title}</p>
+          <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1 tracking-tight">{value}</h3>
         </div>
         {icon && (
-          <div className={`p-2.5 rounded-lg ${iconBgMap}`}>
+          <div className={`p-2.5 rounded-xl border border-black/[0.04] ${iconBgMap}`}>
             {icon}
           </div>
         )}

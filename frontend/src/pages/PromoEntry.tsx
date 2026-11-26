@@ -4,6 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { ColDef, CellValueChangedEvent } from 'ag-grid-community';
 import { Button } from '../components/common/Button.js';
 import { ConfirmDialog } from '../components/common/ConfirmDialog.js';
+import { PageHeader } from '../components/layout/PageHeader.js';
 import {
   PromoList,
   PromoLine,
@@ -1690,12 +1691,13 @@ export const PromoEntry: React.FC = () => {
   }
 
   return (
-    <div className="space-y-4 pb-12">
-      {/* 1. Page Header matching screenshot */}
-      <div className="pt-0.5">
-        <h1 className="text-xl font-bold text-slate-900 tracking-tight">New Promo List</h1>
-        <p className="text-xs text-slate-500 mt-0.5">Create and prepare a promotional list for Head review.</p>
-      </div>
+    <div className="space-y-6 pb-12">
+      {/* Executive Page Header matching Login & Dashboard */}
+      <PageHeader
+        title={promoId ? 'Edit Promo List' : 'New Promo List'}
+        description="Prepare promotional SKUs, verify live POS margins, and submit for Department Head approval."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Promo Entry' }]}
+      />
 
       {/* Toast Notification Banner */}
       {/* Head feedback on a rejected / returned list (includes per-line comments) */}
@@ -1737,7 +1739,9 @@ export const PromoEntry: React.FC = () => {
 
       {/* ==================== 5. DEPT STAFF INPUT (11 INPUT FIELDS ONLY) ==================== */}
       {isEditable && (
-        <div className="bg-white rounded-xl border border-slate-200/90 p-5 shadow-xs space-y-4">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/[0.04] overflow-hidden">
+          <div className="h-1 w-full bg-gradient-to-r from-[#E31B23] via-emerald-500 to-[#007D32]" />
+          <div className="p-5 sm:p-6 space-y-4">
           {/* Card Header matching screenshot with Excel Upload actions */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
@@ -2135,17 +2139,20 @@ export const PromoEntry: React.FC = () => {
               <button
                 type="button"
                 onClick={handleAdd11FieldLine}
-                className="w-full bg-[#007d32] hover:bg-[#00682a] text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 shadow-sm transition"
+                className="w-full bg-[#007d32] hover:bg-[#00682a] text-white font-bold text-xs py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition cursor-pointer"
               >
                 <Plus className="w-4 h-4" /> Add to Promo List
               </button>
             </div>
           </div>
+          </div>
         </div>
       )}
 
       {/* ==================== 6. PROMOTION LINES TABLE ==================== */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden space-y-3 p-5">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/[0.04] overflow-hidden">
+        <div className="h-1 w-full bg-gradient-to-r from-[#E31B23] via-emerald-500 to-[#007D32]" />
+        <div className="space-y-3 p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
             <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white text-xs font-bold">
@@ -2634,10 +2641,11 @@ export const PromoEntry: React.FC = () => {
             />
           </div>
         )}
+        </div>
       </div>
 
       {/* 7. Summary / Campaign Totals */}
-      <div className="bg-[#0b1727] text-white rounded-xl shadow-md p-4 px-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="rounded-3xl bg-gradient-to-br from-[#041a10] via-[#00381e] to-[#02140b] border border-emerald-950/50 text-white shadow-xl p-5 px-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         <div>
           <span className="block text-[10px] uppercase tracking-wider text-slate-400 font-bold">
             TOTAL SKUS

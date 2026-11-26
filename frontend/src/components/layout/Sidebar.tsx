@@ -4,6 +4,7 @@ import { LogOut, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext.js';
 import { fetchHeadReviewList } from '../../services/promoService.js';
 import { NavItem, navItemsFor, roleLabel } from './navigation.js';
+import { getRoleTheme } from '../../utils/roleTheme.js';
 
 interface SidebarProps {
   /** Below the lg breakpoint the sidebar is a drawer; this controls whether it is showing. */
@@ -41,6 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
   }, [user]);
 
   const items = navItemsFor(user?.role);
+  const roleTheme = getRoleTheme(user?.role);
 
   const displayName = user ? user.name || `${user.firstName} ${user.lastName}`.trim() : 'SPAR User';
   const initials = user
@@ -62,14 +64,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
       />
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#003818] text-white flex flex-col flex-shrink-0 shadow-2xl select-none transition-transform duration-200 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-br from-[#041a10] via-[#00381e] to-[#02140b] text-white flex flex-col flex-shrink-0 shadow-2xl border-r border-emerald-950/40 select-none transition-transform duration-200 lg:static lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-label="Main navigation"
       >
+        {/* Top Brand Stripe Accent matching Login */}
+        <div className="px-4 pt-4 pb-1 flex items-center gap-1.5">
+          <div className="h-1 w-9 rounded-full bg-[#E31B23]" />
+          <div className="h-1 w-14 rounded-full bg-[#007D32]" />
+          <div className="h-1 w-2.5 rounded-full bg-white/20" />
+        </div>
+
         {/* SPAR Brand Logo */}
-        <div className="p-4 pb-2 flex items-start gap-2">
-          <div className="flex-1 bg-white rounded-xl p-2.5 flex items-center justify-center shadow-md">
+        <div className="px-4 pt-2 pb-2 flex items-start gap-2">
+          <div className="flex-1 bg-white rounded-xl px-3 py-2.5 flex items-center justify-center shadow-xl shadow-black/25 ring-1 ring-white/25">
             <img
               src="/spar-logo.png"
               alt="SPAR"
@@ -151,23 +160,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
         </nav>
 
         {/* Signed-in user and sign out */}
-        <div className="p-3 m-3 mt-0 bg-[#004c1f] rounded-2xl border border-[#00682a] space-y-3">
+        <div className="p-3.5 m-3 mt-0 bg-white/[0.06] backdrop-blur-md rounded-2xl border border-white/15 shadow-lg shadow-black/20 space-y-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-[#d9222a] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31B23] to-[#b8141a] text-white flex items-center justify-center font-black text-sm shadow-sm flex-shrink-0 ring-1 ring-white/20">
               {initials}
             </div>
-            <div className="min-w-0">
-              <p className="text-sm font-bold text-white truncate leading-tight" title={displayName}>
-                {displayName}
-              </p>
-              <p className="text-[11px] text-emerald-300/90 truncate" title={displaySubtitle}>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-1.5">
+                <p className="text-sm font-bold text-white truncate leading-tight" title={displayName}>
+                  {displayName}
+                </p>
+              </div>
+              <p className="text-[11px] text-emerald-200/80 truncate mt-0.5" title={displaySubtitle}>
                 {displaySubtitle}
               </p>
+              <span
+                className={`mt-1.5 inline-flex items-center px-2 py-0.5 rounded-md border text-[10px] font-bold tracking-wide ${roleTheme.darkBadgeClass}`}
+              >
+                {roleTheme.badge}
+              </span>
             </div>
           </div>
           <button
             onClick={logout}
-            className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#00682a] bg-[#003818] hover:bg-[#e31e24] hover:border-[#e31e24] text-emerald-50 text-xs font-bold py-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#54c78a]"
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-black/25 hover:bg-[#E31B23] hover:border-[#E31B23] text-emerald-50 text-xs font-bold py-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#54c78a]"
           >
             <LogOut className="w-3.5 h-3.5" />
             Sign out

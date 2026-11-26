@@ -95,10 +95,12 @@ export const Audit: React.FC = () => {
         }
       />
 
-      <div className="p-4 rounded-xl bg-white border border-slate-200 text-xs text-slate-600 flex items-start gap-3 shadow-sm">
-        <ShieldCheck className="w-5 h-5 text-spar-green flex-shrink-0 mt-0.5" />
+      <div className="p-4 sm:px-5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-slate-700 flex items-start gap-3.5 shadow-xs">
+        <div className="w-9 h-9 rounded-xl bg-white border border-emerald-200 text-[#007D32] flex items-center justify-center flex-shrink-0">
+          <ShieldCheck className="w-4 h-4" />
+        </div>
         <div>
-          <span className="font-bold text-slate-900 block mb-0.5">Enterprise Compliance</span>
+          <span className="font-bold text-slate-900 block mb-0.5">Enterprise Compliance & Immutable Logging</span>
           Every promotional workflow state change is recorded with user identity, timestamp, and IP address to guarantee compliance with SPAR commercial auditing standards.
         </div>
       </div>

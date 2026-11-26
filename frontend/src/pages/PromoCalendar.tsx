@@ -248,7 +248,7 @@ export const PromoCalendar: React.FC = () => {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <PageHeader
         title="Promo Calendar"
         description="Every promo list you can see, laid out across the dates it runs."
@@ -278,21 +278,22 @@ export const PromoCalendar: React.FC = () => {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{s.label}</p>
-            <p className={`text-2xl font-bold mt-1 tabular-nums ${s.tone}`}>{s.value}</p>
+          <div key={s.label} className="bg-white rounded-2xl border border-slate-200/90 px-4 py-3 shadow-sm flex items-center justify-between gap-2">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">{s.label}</p>
+            <p className={`text-2xl font-black tabular-nums tracking-tight ${s.tone}`}>{s.value}</p>
           </div>
         ))}
       </div>
 
       {error && (
-        <div className="bg-rose-50 border border-rose-200 text-rose-800 text-sm rounded-xl p-4">{error}</div>
+        <div className="bg-red-50 border border-red-200 text-red-900 text-sm rounded-2xl p-4 font-semibold">{error}</div>
       )}
 
-      <div className="flex flex-col xl:flex-row gap-5 items-start">
+      <div className="flex flex-col xl:flex-row gap-4 items-start">
         {/* Calendar */}
-        <div className="flex-1 min-w-0 w-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+        <div className="flex-1 min-w-0 w-full bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/[0.04] overflow-hidden">
+          <div className="h-1 w-full bg-gradient-to-r from-[#E31B23] via-[#E31B23] to-[#007D32]" />
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <button onClick={() => shiftMonth(-1)} className="p-1.5 rounded-lg hover:bg-slate-100" aria-label="Previous month">
                 <ChevronLeft className="w-4 h-4" />
@@ -300,13 +301,13 @@ export const PromoCalendar: React.FC = () => {
               <button onClick={() => shiftMonth(1)} className="p-1.5 rounded-lg hover:bg-slate-100" aria-label="Next month">
                 <ChevronRight className="w-4 h-4" />
               </button>
-              <h2 className="text-base font-bold text-slate-900 ml-1">
+              <h2 className="text-sm sm:text-base font-bold text-slate-900 ml-1">
                 {month.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
               </h2>
             </div>
             <button
               onClick={goToday}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700"
+              className="text-xs font-semibold px-3 py-1 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700"
             >
               Today
             </button>
@@ -314,14 +315,14 @@ export const PromoCalendar: React.FC = () => {
 
           <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
             {WEEKDAYS.map((d) => (
-              <div key={d} className="px-2 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              <div key={d} className="px-2 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-slate-500">
                 {d}
               </div>
             ))}
           </div>
 
           {isLoading ? (
-            <div className="p-12 text-center text-sm text-slate-400">Loading promo lists…</div>
+            <div className="p-10 text-center text-sm text-slate-400">Loading promo lists…</div>
           ) : (
             weeks.map((week, wi) => {
               const { segments, hiddenPerDay } = weekSegments[wi];
@@ -339,12 +340,12 @@ export const PromoCalendar: React.FC = () => {
                             setSelectedDay(key);
                             setSelectedPromoId(null);
                           }}
-                          className={`min-h-[118px] text-left p-1.5 border-r border-slate-100 last:border-r-0 flex flex-col justify-between transition ${
+                          className={`min-h-[80px] text-left p-1.5 border-r border-slate-100 last:border-r-0 flex flex-col justify-between transition ${
                             outside ? 'bg-slate-50/70' : 'bg-white'
                           } ${isSelected ? 'ring-2 ring-inset ring-[#005A36]' : 'hover:bg-emerald-50/40'}`}
                         >
                           <span
-                            className={`text-xs w-6 h-6 inline-flex items-center justify-center rounded-full ${
+                            className={`text-[11px] w-5 h-5 inline-flex items-center justify-center rounded-full ${
                               key === todayKey
                                 ? 'bg-[#E31B23] text-white font-bold'
                                 : outside
@@ -364,8 +365,8 @@ export const PromoCalendar: React.FC = () => {
 
                   {/* Promo bars overlay */}
                   <div
-                    className="absolute left-0 right-0 top-8 grid grid-cols-7 gap-y-1 pointer-events-none px-0.5"
-                    style={{ gridAutoRows: '20px' }}
+                    className="absolute left-0 right-0 top-7 grid grid-cols-7 gap-y-0.5 pointer-events-none px-0.5"
+                    style={{ gridAutoRows: '16px' }}
                   >
                     {segments
                       .filter((sg) => sg.lane < MAX_LANES)
@@ -376,7 +377,7 @@ export const PromoCalendar: React.FC = () => {
                             setSelectedPromoId(sg.promo.id);
                           }}
                           title={`${sg.promo.title} (${getStatusDetails(sg.promo.status).label})`}
-                          className={`pointer-events-auto mx-0.5 px-2 text-[11px] font-semibold truncate text-left shadow-sm transition ${
+                          className={`pointer-events-auto mx-0.5 px-1.5 text-[10px] leading-tight font-semibold truncate text-left shadow-xs transition ${
                             STATUS_BAR[sg.promo.status]
                           } ${sg.continuesBefore ? 'rounded-l-none' : 'rounded-l-md'} ${
                             sg.continuesAfter ? 'rounded-r-none' : 'rounded-r-md'
@@ -393,10 +394,10 @@ export const PromoCalendar: React.FC = () => {
             })
           )}
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 border-t border-slate-200 bg-slate-50">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 px-4 py-2.5 border-t border-slate-200 bg-slate-50">
             {ALL_STATUSES.map((s) => (
               <span key={s} className="inline-flex items-center gap-1.5 text-[11px] text-slate-600">
-                <span className={`w-3 h-3 rounded-sm ${STATUS_BAR[s].split(' ')[0]}`} />
+                <span className={`w-2.5 h-2.5 rounded-sm ${STATUS_BAR[s].split(' ')[0]}`} />
                 {getStatusDetails(s).label}
               </span>
             ))}
@@ -404,7 +405,9 @@ export const PromoCalendar: React.FC = () => {
         </div>
 
         {/* Side panel */}
-        <aside className="w-full xl:w-80 flex-shrink-0 bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
+        <aside className="w-full xl:w-72 flex-shrink-0 bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/[0.04] overflow-hidden">
+          <div className="h-1 w-full bg-gradient-to-r from-[#E31B23] via-emerald-500 to-[#007D32]" />
+          <div className="p-4 space-y-3">
           {selectedPromo ? (
             <>
               <div className="flex items-center justify-between">
@@ -430,9 +433,10 @@ export const PromoCalendar: React.FC = () => {
                   ? 'No promo lists running on this day.'
                   : `${dayPromos.length} promo list${dayPromos.length === 1 ? '' : 's'} running`}
               </p>
-              <div className="space-y-2 max-h-[560px] overflow-y-auto">{dayPromos.map((p) => renderPromoCard(p))}</div>
+              <div className="space-y-2 max-h-[420px] overflow-y-auto">{dayPromos.map((p) => renderPromoCard(p))}</div>
             </>
           )}
+          </div>
         </aside>
       </div>
     </div>

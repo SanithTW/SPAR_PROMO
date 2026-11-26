@@ -1008,16 +1008,16 @@ export const HeadReview: React.FC = () => {
       />
 
       {/* Governance Banner: Head is Final Approver */}
-      <div className="p-4 rounded-xl bg-[#007d32] text-white flex items-start gap-3.5 border border-[#00682a] shadow-md">
-        <div className="p-2 rounded-lg bg-white/20 text-white mt-0.5 flex-shrink-0">
-          <ShieldAlert className="w-5 h-5 stroke-[2.5]" />
+      <div className="p-4 sm:px-5 rounded-2xl bg-red-50/70 border border-red-200/80 text-slate-700 flex items-start gap-3.5 shadow-xs">
+        <div className="w-9 h-9 rounded-xl bg-white border border-red-200 text-[#E31B23] flex items-center justify-center flex-shrink-0">
+          <ShieldAlert className="w-4 h-4" />
         </div>
         <div>
-          <h4 className="text-sm font-bold text-white tracking-wide">
+          <h4 className="text-xs font-bold text-slate-900 tracking-wide uppercase">
             Department Head Final Approval Queue (No Director Stage)
           </h4>
-          <p className="text-xs text-white/90 mt-0.5 leading-relaxed font-normal">
-            Logged in as <strong>{user?.firstName} {user?.lastName}</strong> ({user?.department?.name || 'Assigned Department'}). You have final sign-off authority for your department's promotional campaigns.
+          <p className="text-xs text-slate-600 mt-0.5 leading-relaxed font-normal">
+            Logged in as <strong className="text-slate-900">{user?.firstName} {user?.lastName}</strong> ({user?.department?.name || 'Assigned Department'}). You have final sign-off authority for your department&apos;s promotional campaigns.
           </p>
         </div>
       </div>
@@ -1044,7 +1044,7 @@ export const HeadReview: React.FC = () => {
       )}
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+      <div className="bg-white rounded-3xl border border-slate-200/90 p-4 sm:p-5 shadow-xl shadow-slate-900/[0.04] space-y-3">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           {/* Status Tabs */}
           <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg text-xs font-semibold overflow-x-auto">
@@ -1164,7 +1164,8 @@ export const HeadReview: React.FC = () => {
       </div>
 
       {/* Review Queue List Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/[0.04] overflow-hidden">
+        <div className="h-1 w-full bg-gradient-to-r from-[#E31B23] via-[#E31B23] to-[#007D32]" />
         {isLoadingList ? (
           <div className="p-12 text-center text-slate-400 space-y-2">
             <div className="w-8 h-8 border-2 border-spar-green border-t-transparent rounded-full animate-spin mx-auto" />

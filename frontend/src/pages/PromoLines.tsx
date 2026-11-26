@@ -12,7 +12,7 @@ import { promoTypeLabel } from '../utils/promoLinks.js';
 import { useAuth } from '../contexts/AuthContext.js';
 
 /** One grid row: a promo line together with the promo list it belongs to. */
-interface ListRow extends PromoLine {
+interface ListRow extends Omit<PromoLine, 'promo'> {
   promo: PromoList;
 }
 
@@ -306,19 +306,19 @@ export const PromoLines: React.FC = () => {
         }
       />
 
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3">
+      <div className="bg-white rounded-3xl border border-slate-200/90 p-4 sm:p-5 shadow-xl shadow-slate-900/[0.04] flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search any column: product, SKU, promo code, mechanic..."
-            className="w-full text-xs pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-spar-green text-slate-800"
+            className="w-full text-xs pl-9 pr-3 py-2.5 bg-slate-50/80 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007D32]/15 focus:border-[#007D32] text-slate-800 transition"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <select
-          className="w-full sm:w-48 text-xs py-2 px-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-spar-green text-slate-700"
+          className="w-full sm:w-52 text-xs font-semibold py-2.5 px-3 bg-slate-50/80 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007D32]/15 focus:border-[#007D32] text-slate-700 transition"
           value={departmentId}
           onChange={(e) => setDepartmentId(e.target.value)}
         >
@@ -329,13 +329,14 @@ export const PromoLines: React.FC = () => {
             </option>
           ))}
         </select>
-        <span className="text-xs text-slate-500 whitespace-nowrap">
-          {rows.length.toLocaleString()} line{rows.length === 1 ? '' : 's'} from {promoCount} promo list
+        <span className="inline-flex items-center px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-[#007D32] whitespace-nowrap">
+          {rows.length.toLocaleString()} line{rows.length === 1 ? '' : 's'} · {promoCount} promo list
           {promoCount === 1 ? '' : 's'}
         </span>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/[0.04] overflow-hidden">
+        <div className="h-1 w-full bg-gradient-to-r from-[#E31B23] via-sky-500 to-[#007D32]" />
         {isLoading ? (
           <div className="p-12 text-center text-slate-400 space-y-2">
             <div className="w-8 h-8 border-2 border-spar-green border-t-transparent rounded-full animate-spin mx-auto" />
